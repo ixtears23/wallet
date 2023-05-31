@@ -8,7 +8,6 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
-
 @Getter
 @ToString
 public class EthereumWallet {
@@ -18,8 +17,8 @@ public class EthereumWallet {
 
     public EthereumWallet(final String password) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException, CipherException {
         ECKeyPair ecKeyPair = Keys.createEcKeyPair();
-        Credentials credentials = Credentials.create(ecKeyPair);
         WalletFile wallet = Wallet.createStandard(password, ecKeyPair);
+        Credentials credentials = Credentials.create(ecKeyPair);
         privateKey = credentials.getEcKeyPair().getPrivateKey().toString(16);
         publicKey = credentials.getEcKeyPair().getPublicKey().toString(16);
         address = wallet.getAddress();

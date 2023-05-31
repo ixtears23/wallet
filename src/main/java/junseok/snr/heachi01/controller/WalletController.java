@@ -22,6 +22,7 @@ public class WalletController {
 
     @PostMapping(value ="/wallet")
     public EthereumWallet createEthereumWallet(@RequestBody final CreateEthereumWallet createEthereumWallet) throws Exception {
+
         return new EthereumWallet(createEthereumWallet.getPassword());
     }
 
@@ -30,8 +31,7 @@ public class WalletController {
         log.info(">>>>> getBalance address :: {}", address);
 
         try {
-            EthGetBalance ethGetBalance = web3j
-                    .ethGetBalance(address, DefaultBlockParameterName.LATEST)
+            EthGetBalance ethGetBalance = web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST)
                     .sendAsync()
                     .get();
 
