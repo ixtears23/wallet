@@ -3,6 +3,7 @@ package junseok.snr.heachi01.controller;
 import junseok.snr.heachi01.domain.EthereumWallet;
 import junseok.snr.heachi01.dto.CreateEthereumWallet;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
 import org.springframework.web.bind.annotation.*;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -22,6 +23,9 @@ public class WalletController {
 
     @PostMapping(value ="/wallet")
     public EthereumWallet createEthereumWallet(@RequestBody final CreateEthereumWallet createEthereumWallet) throws Exception {
+
+        final OkHttpClient okHttpClient = new OkHttpClient();
+
 
         return new EthereumWallet(createEthereumWallet.getPassword());
     }
