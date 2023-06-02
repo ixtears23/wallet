@@ -15,11 +15,8 @@ import java.math.BigInteger;
 @Slf4j
 @RestController
 public class WalletController {
-    private final Web3j web3j;
+    private static final Web3j web3j = Web3j.build(new HttpService("https://tn.henesis.io/ethereum/goerli?clientId=815fcd01324b8f75818a755a72557750"));
 
-    public WalletController() {
-        this.web3j = Web3j.build(new HttpService("https://tn.henesis.io/ethereum/goerli"));
-    }
 
     @PostMapping(value ="/wallet")
     public EthereumWallet createEthereumWallet(@RequestBody final CreateEthereumWallet createEthereumWallet) throws Exception {
@@ -31,7 +28,7 @@ public class WalletController {
     }
 
     @GetMapping(value = "/wallet/balance/{address}")
-    public BigInteger getBalance(@PathVariable String address) {
+    public static BigInteger getBalance(@PathVariable String address) {
         log.info(">>>>> getBalance address :: {}", address);
 
         try {
@@ -43,5 +40,10 @@ public class WalletController {
         } catch (Exception e) {
             throw new RuntimeException("Error while fetching balance", e);
         }
+    }
+
+    public static void main(String[] args) {
+        final BigInteger balance = WalletController.getBalance("0x47567102B073c29621B06cDCaDF9754ed78F4129");
+        log.info(">>>>> balance ::: {}", balance);
     }
 }
