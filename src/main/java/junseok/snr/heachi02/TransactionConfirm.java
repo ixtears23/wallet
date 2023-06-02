@@ -21,16 +21,25 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class TransactionConfirm {
 
-    public static int getConfirmationNumber(String transactionHash) throws Exception {
+    public int getConfirmationNumber(String transactionHash) throws Exception {
 
-        EthGetTransactionReceipt receiptResponse = WalletUtils.getWeb3j().ethGetTransactionReceipt(transactionHash).sendAsync().get();
-        EthBlockNumber latestBlockResponse = WalletUtils.getWeb3j().ethBlockNumber().sendAsync().get();
+        EthGetTransactionReceipt receiptResponse = WalletUtils.getWeb3j()
+                .ethGetTransactionReceipt(transactionHash)
+                .sendAsync()
+                .get();
+
+        EthBlockNumber latestBlockResponse = WalletUtils.getWeb3j()
+                .ethBlockNumber()
+                .sendAsync()
+                .get();
 
         if (receiptResponse.getTransactionReceipt().isPresent()) {
             TransactionReceipt receipt = receiptResponse.getTransactionReceipt().get();
             BigInteger transactionBlockNumber = receipt.getBlockNumber();
             BigInteger latestBlockNumber = latestBlockResponse.getBlockNumber();
-            return latestBlockNumber.subtract(transactionBlockNumber).intValue();
+            final int confirmationNumber = latestBlockNumber.subtract(transactionBlockNumber).intValue();
+            log.info(">>>>> transactionHash : {}, confirmationNumber : {}", transactionHash, confirmationNumber);
+            return confirmationNumber;
         } else {
             throw new Exception("Transaction receipt not generated yet");
         }
@@ -93,8 +102,12 @@ public class TransactionConfirm {
             throw new Exception("Error processing transaction request: " + transactionResponse.getError().getMessage());
         }
 
-        return transactionResponse.getTransactionHash();
+        final String transactionHash = transactionResponse.getTransactionHash();
+        log.info(">>>>> transactionHash : {}", transactionHash);
+
+        return transactionHash;
     }
+
 
 
     public static CompletableFuture<String> transfer(@RequestParam("privateKey") String privateKey,

@@ -28,7 +28,8 @@ class WalletTest {
 
     @ValueSource(strings = { "0x9073f43E9bb99C0BB848dFb713eC452C702e7ceF", "0x0" })
     @ParameterizedTest
-    void getBalanceInvalidAddressTest(String address) {
+    void getBalanceInvalidAddressTest(String address) throws Exception {
         final Wallet wallet = new Wallet();
+        wallet.getBalance(address);
     }
 }
