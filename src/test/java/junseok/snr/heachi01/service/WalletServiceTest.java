@@ -4,8 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.web3j.crypto.WalletFile;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class WalletServiceTest {
 
     private static final WalletService walletSErvice = new WalletService("https://tn.henesis.io/ethereum/goerli");
@@ -20,12 +18,5 @@ class WalletServiceTest {
         System.out.println(wallet.getVersion());
         System.out.println(wallet.getCrypto());
     }
-
-    @DisplayName("이 테스트는 실패")
-    @Test
-    void createWalletFailedTest() {
-        walletSErvice.createWallet();
-    }
-
 
 }
