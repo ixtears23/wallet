@@ -1,7 +1,8 @@
 package junseok.snr.wallet.repository;
 
-import junseok.snr.wallet.domain.Wallet;
-import junseok.snr.wallet.domain.WalletType;
+import junseok.snr.wallet.api.domain.Wallet;
+import junseok.snr.wallet.api.domain.WalletType;
+import junseok.snr.wallet.api.repository.WalletRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

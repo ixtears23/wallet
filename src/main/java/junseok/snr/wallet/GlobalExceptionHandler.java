@@ -1,6 +1,6 @@
 package junseok.snr.wallet;
 
-import junseok.snr.wallet.service.BalanceException;
+import junseok.snr.wallet.api.service.BalanceException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

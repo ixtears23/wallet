@@ -1,11 +1,11 @@
-package junseok.snr.wallet.service;
+package junseok.snr.wallet.api.service;
 
 import io.micrometer.common.util.StringUtils;
 import junseok.snr.wallet.Web3jUtils;
-import junseok.snr.wallet.controller.dto.CreateWalletDto;
-import junseok.snr.wallet.domain.Wallet;
-import junseok.snr.wallet.domain.WalletType;
-import junseok.snr.wallet.repository.WalletRepository;
+import junseok.snr.wallet.api.controller.dto.CreateWalletDto;
+import junseok.snr.wallet.api.domain.Wallet;
+import junseok.snr.wallet.api.domain.WalletType;
+import junseok.snr.wallet.api.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

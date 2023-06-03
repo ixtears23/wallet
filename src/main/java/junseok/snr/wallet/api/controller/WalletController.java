@@ -1,16 +1,15 @@
-package junseok.snr.wallet.controller;
+package junseok.snr.wallet.api.controller;
 
 
 import jakarta.validation.Valid;
-import junseok.snr.wallet.controller.dto.CreateWalletDto;
-import junseok.snr.wallet.domain.Wallet;
-import junseok.snr.wallet.service.WalletService;
+import junseok.snr.wallet.api.controller.dto.CreateWalletDto;
+import junseok.snr.wallet.api.domain.Wallet;
+import junseok.snr.wallet.api.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @Slf4j

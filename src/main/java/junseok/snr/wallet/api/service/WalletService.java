@@ -1,7 +1,7 @@
-package junseok.snr.wallet.service;
+package junseok.snr.wallet.api.service;
 
-import junseok.snr.wallet.controller.dto.CreateWalletDto;
-import junseok.snr.wallet.domain.Wallet;
+import junseok.snr.wallet.api.controller.dto.CreateWalletDto;
+import junseok.snr.wallet.api.domain.Wallet;
 
 import java.math.BigInteger;
 

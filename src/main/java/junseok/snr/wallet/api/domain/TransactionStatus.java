@@ -1,4 +1,4 @@
-package junseok.snr.wallet.domain;
+package junseok.snr.wallet.api.domain;
 
 public enum TransactionStatus {
     PENDING,

@@ -1,9 +1,9 @@
-package junseok.snr.wallet.service;
+package junseok.snr.wallet.api.service;
 
 import junseok.snr.wallet.Web3jUtils;
-import junseok.snr.wallet.domain.Transaction;
-import junseok.snr.wallet.domain.TransactionStatus;
-import junseok.snr.wallet.repository.TransactionRepository;
+import junseok.snr.wallet.api.domain.Transaction;
+import junseok.snr.wallet.api.domain.TransactionStatus;
+import junseok.snr.wallet.api.repository.TransactionRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -32,20 +32,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final Web3jUtils web3jUtils;
 
-    @Transactional
-    @Scheduled(fixedRate = 5000)
-    public void updateTransactionStatuses() throws Exception {
-        log.info(">>>>> updateTransactionStatuses - now : {}", LocalDateTime.now());
-        List<Transaction> transactions = transactionRepository.findByStatusNot(TransactionStatus.CONFIRMED);
-        log.info(">>>>> updateTransactionStatuses - transactions : {}", transactions);
-        for (Transaction transaction : transactions) {
-            final int confirmationCount = getConfirmationNumber(transaction.getTransactionHash());
-            transaction.updateStatus(confirmationCount);
-            transactionRepository.save(transaction);
-        }
-    }
-
-    private int getConfirmationNumber(String transactionHash) throws Exception {
+    public int getConfirmationNumber(String transactionHash) throws Exception {
         final EthGetTransactionReceipt receiptResponse = web3jUtils.getWeb3j()
                 .ethGetTransactionReceipt(transactionHash)
                 .sendAsync()
@@ -110,8 +97,7 @@ public class TransactionService {
                 .get();
     }
 
-    @NotNull
-    private static String signTransaction(Credentials credentials, RawTransaction rawTransaction) {
+    private String signTransaction(Credentials credentials, RawTransaction rawTransaction) {
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
 
@@ -142,5 +128,15 @@ public class TransactionService {
         log.info(">>>>> gasLimit : {}", gasLimit);
         log.info(">>>>> gasLimitInEther : {}", web3jUtils.convertToEther(gasLimit));
         return gasLimit;
+    }
+
+    public List<Transaction> getTransactions(String startingAfter, String endingBefore) {
+        if (startingAfter != null) {
+            return transactionRepository.findTop10ByTransactionHashGreaterThanOrderByTransactionHashAsc(startingAfter);
+        } else if (endingBefore != null) {
+            return transactionRepository.findTop10ByTransactionHashLessThanOrderByTransactionHashDesc(endingBefore);
+        } else {
+            return transactionRepository.findTop10ByOrderByTransactionHashDesc();
+        }
     }
 }

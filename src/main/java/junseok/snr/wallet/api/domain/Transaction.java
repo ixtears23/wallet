@@ -1,4 +1,4 @@
-package junseok.snr.wallet.domain;
+package junseok.snr.wallet.api.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
