@@ -1,10 +1,15 @@
 package junseok.snr.wallet.api.domain;
 
 import jakarta.persistence.*;
+import junseok.snr.wallet.api.service.ExceptionCode;
+import junseok.snr.wallet.api.service.TransactionException;
+import junseok.snr.wallet.api.service.WalletException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.math.BigDecimal;
 
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,28 +23,59 @@ public class Transaction extends BaseEntity {
     @GeneratedValue
     private Long id;
     private String transactionHash;
-    private int confirmationCount;
+    private Integer confirmationCount;
+    private BigDecimal amount;
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
     @ManyToOne
     private Wallet wallet;
 
-    public Transaction(String transactionHash) {
+    public Transaction(Wallet wallet, String transactionHash, BigDecimal amount, TransactionType type) {
+        if (wallet == null) throw new TransactionException(ExceptionCode.TRN_001);
+
+        if (TransactionType.DEPOSIT.equals(type)
+                && wallet.isWithdrawalImpossible(amount)) {
+            throw new WalletException(ExceptionCode.TRN_002);
+        }
+
         this.transactionHash = transactionHash;
+        this.amount = amount;
+        this.type = type;
+        initializeStatus();
+    }
+
+    private void initializeStatus() {
         this.status = TransactionStatus.PENDING;
+    }
+
+    public boolean isChangedConfirmation(int confirmationCount) {
+        return this.confirmationCount != confirmationCount;
     }
 
     public void updateStatus(int confirmationCount) {
         this.confirmationCount = confirmationCount;
-        if (isMined(confirmationCount)) status = TransactionStatus.MINED;
-        if (isConfirmed(confirmationCount)) status = TransactionStatus.CONFIRMED;
+        if (isMined(confirmationCount)) mine();
+        if (isConfirmed(confirmationCount)) confirm();
     }
 
-    public boolean isConfirmed(int confirmationCount) {
+    private boolean isMined(int confirmationCount) {
+        return CONFIRM_COUNT > confirmationCount;
+    }
+
+    private void mine() {
+        this.status = TransactionStatus.MINED;
+    }
+
+    private boolean isConfirmed(int confirmationCount) {
         return CONFIRM_COUNT <= confirmationCount;
     }
 
-    public boolean isMined(int confirmationCount) {
-        return CONFIRM_COUNT > confirmationCount;
+    private void confirm() {
+        this.status = TransactionStatus.CONFIRMED;
+        if (TransactionType.DEPOSIT.equals(type)) wallet.deposit(amount);
+        if (TransactionType.WITHDRAW.equals(type)) wallet.withdraw(amount);
     }
+
 }

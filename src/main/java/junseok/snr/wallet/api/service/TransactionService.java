@@ -56,11 +56,9 @@ public class TransactionService {
         return confirmationNumber;
     }
 
-
-    public String sendTransaction(String privateKey, String to, BigInteger etherInWei) throws Exception {
+    public String getTransaction(String privateKey, String to, BigInteger etherInWei) throws Exception {
         Credentials credentials = Credentials.create(privateKey);
 
-        // 트랜잭션 생성
         BigInteger nonce = web3jUtils.getWeb3j()
                 .ethGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.LATEST)
                 .sendAsync()
@@ -135,8 +133,7 @@ public class TransactionService {
             return transactionRepository.findTop10ByTransactionHashGreaterThanOrderByTransactionHashAsc(startingAfter);
         } else if (endingBefore != null) {
             return transactionRepository.findTop10ByTransactionHashLessThanOrderByTransactionHashDesc(endingBefore);
-        } else {
-            return transactionRepository.findTop10ByOrderByTransactionHashDesc();
         }
+        return transactionRepository.findTop10ByOrderByTransactionHashDesc();
     }
 }

@@ -1,14 +1,14 @@
 package junseok.snr.wallet;
 
-import junseok.snr.wallet.api.service.BalanceException;
+import junseok.snr.wallet.api.service.WalletException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(BalanceException.class)
-    public ExceptionResponse handleRuntimeException(BalanceException exception) {
+    @ExceptionHandler(WalletException.class)
+    public ExceptionResponse handleRuntimeException(WalletException exception) {
         return ExceptionResponse.builder()
                 .code(exception.getCode())
                 .message(exception.getMessage())

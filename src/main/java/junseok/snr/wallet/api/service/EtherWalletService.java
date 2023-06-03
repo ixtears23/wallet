@@ -59,7 +59,7 @@ public class EtherWalletService implements WalletService {
     @Transactional(readOnly = true)
     @Override
     public BigInteger getBalance(String address) throws Exception {
-        if (StringUtils.isBlank(address)) throw new BalanceException(ExceptionCode.BLA_001);
+        if (StringUtils.isBlank(address)) throw new WalletException(ExceptionCode.WAL_001);
 
         final CompletableFuture<EthGetBalance> future = web3jUtils.getWeb3j()
                 .ethGetBalance(address, DefaultBlockParameterName.LATEST)

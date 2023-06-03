@@ -2,6 +2,9 @@ package junseok.snr.wallet.api.domain;
 
 
 import jakarta.persistence.*;
+import junseok.snr.wallet.AESEncryptionService;
+import junseok.snr.wallet.api.service.ExceptionCode;
+import junseok.snr.wallet.api.service.WalletException;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -25,8 +28,27 @@ public class Wallet extends BaseEntity {
     public Wallet(String address, String password, String privateKey, WalletType walletType) {
         this.address = address;
         this.password = password;
-        this.privateKey = privateKey;
+        this.privateKey = AESEncryptionService.encrypt(privateKey, this.password);
         this.balance = BigDecimal.ZERO;
         this.walletType = walletType;
+    }
+
+    public void deposit(BigDecimal amount) {
+        balance = balance.add(amount);
+    }
+
+    public void withdraw(BigDecimal amount) {
+        if (isWithdrawalImpossible(amount)) {
+            throw new WalletException(ExceptionCode.WAL_002);
+        }
+        balance = balance.subtract(amount);
+    }
+
+    public boolean isWithdrawalImpossible(BigDecimal amount) {
+        return balance.compareTo(amount) < 0;
+    }
+
+    public String getPrivateKey() {
+        return AESEncryptionService.decrypt(this.privateKey, this.password);
     }
 }
