@@ -4,12 +4,17 @@ node:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/test
+    url: jdbc:postgresql://localhost:5432/wallet
     username: postgres
     password: postgres
   jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
     hibernate:
       ddl-auto: create
       format_sql: true
       show_sql: true
       dialect: org.hibernate.dialect.PostgreSQLDialect
+

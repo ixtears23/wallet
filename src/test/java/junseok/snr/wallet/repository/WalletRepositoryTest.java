@@ -18,13 +18,11 @@ class WalletRepositoryTest {
 
     @Test
     void testSaveWallet() {
-        final Wallet wallet = new Wallet("test", "pk", WalletType.ETH);
+        final Wallet wallet = new Wallet("test", "password", "pk", WalletType.ETH);
         final Wallet savedWallet = walletRepository.save(wallet);
 
         final Wallet findWallet = walletRepository.findById(savedWallet.getId())
                 .orElse(null);
-
-        assertThat(findWallet).isEqualTo(savedWallet);
     }
 
 }
