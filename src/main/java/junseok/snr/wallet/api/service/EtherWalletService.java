@@ -29,7 +29,7 @@ public class EtherWalletService implements WalletService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Wallet createWallet(CreateWalletDto.Request request) throws Exception {
+    public Wallet createWallet(CreateWalletDto request) throws Exception {
         final ECKeyPair ecKeyPair = Keys.createEcKeyPair();
         final String password = request.getPassword();
 

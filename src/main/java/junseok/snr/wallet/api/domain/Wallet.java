@@ -8,6 +8,8 @@ import junseok.snr.wallet.api.service.WalletException;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,6 +26,8 @@ public class Wallet extends BaseEntity {
     private BigDecimal balance;
     @Enumerated(EnumType.STRING)
     private WalletType walletType;
+    @OneToMany(mappedBy = "wallet")
+    private List<Transaction> transactions = new ArrayList<>();
 
     public Wallet(String address, String password, String privateKey, WalletType walletType) {
         this.address = address;

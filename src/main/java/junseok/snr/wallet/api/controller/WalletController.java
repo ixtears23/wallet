@@ -19,9 +19,9 @@ import java.math.BigInteger;
 public class WalletController {
     private final WalletService walletService;
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Wallet createWallet(@RequestBody @Valid CreateWalletDto.Request request) throws Exception {
+    public Wallet createWallet(@RequestBody @Valid CreateWalletDto request) throws Exception {
         log.info(">>>>> createWallet - walletType : {}", request.getWalletType());
         return walletService.createWallet(request);
     }

@@ -29,7 +29,8 @@ public class Transaction extends BaseEntity {
     private TransactionStatus status;
     @Enumerated(EnumType.STRING)
     private TransactionType type;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 
     public Transaction(Wallet wallet, String transactionHash, BigDecimal amount, TransactionType type) {
@@ -51,7 +52,7 @@ public class Transaction extends BaseEntity {
     }
 
     public boolean isChangedConfirmation(int confirmationCount) {
-        return this.confirmationCount != confirmationCount;
+        return this.confirmationCount < confirmationCount;
     }
 
     public void updateStatus(int confirmationCount) {

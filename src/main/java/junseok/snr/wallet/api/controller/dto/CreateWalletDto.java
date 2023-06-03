@@ -6,16 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class CreateWalletDto {
 
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter
-    public static class Request {
-        @NotNull
-        private String password;
-        @NotNull
-        private WalletType walletType;
-    }
-
+    @NotNull
+    private String password;
+    @NotNull
+    private WalletType walletType;
 }

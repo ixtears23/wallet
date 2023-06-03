@@ -6,6 +6,6 @@ import junseok.snr.wallet.api.domain.Wallet;
 import java.math.BigInteger;
 
 public interface WalletService {
-    Wallet createWallet(CreateWalletDto.Request createWalletDto) throws Exception;
+    Wallet createWallet(CreateWalletDto request) throws Exception;
     BigInteger getBalance(String address) throws Exception;
 }

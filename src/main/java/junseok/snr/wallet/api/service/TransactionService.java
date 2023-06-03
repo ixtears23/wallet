@@ -1,13 +1,14 @@
 package junseok.snr.wallet.api.service;
 
 import junseok.snr.wallet.Web3jUtils;
+import junseok.snr.wallet.api.controller.dto.WithdrawDto;
 import junseok.snr.wallet.api.domain.Transaction;
-import junseok.snr.wallet.api.domain.TransactionStatus;
+import junseok.snr.wallet.api.domain.TransactionType;
+import junseok.snr.wallet.api.domain.Wallet;
 import junseok.snr.wallet.api.repository.TransactionRepository;
+import junseok.snr.wallet.api.repository.WalletRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.web3j.crypto.Credentials;
@@ -20,8 +21,8 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Numeric;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -30,6 +31,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class TransactionService {
     private final TransactionRepository transactionRepository;
+    private final WalletRepository walletRepository;
     private final Web3jUtils web3jUtils;
 
     public int getConfirmationNumber(String transactionHash) throws Exception {
@@ -56,36 +58,50 @@ public class TransactionService {
         return confirmationNumber;
     }
 
-    public String getTransaction(String privateKey, String to, BigInteger etherInWei) throws Exception {
-        Credentials credentials = Credentials.create(privateKey);
+    @Transactional
+    public void withdraw(WithdrawDto request) throws Exception {
+        final Wallet wallet = walletRepository.findByAddress(request.getFromAddress());
+        if (wallet == null) throw new TransactionException(ExceptionCode.TRN_001);
+
+        Credentials credentials = Credentials.create(wallet.getPrivateKey());
 
         BigInteger nonce = web3jUtils.getWeb3j()
                 .ethGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.LATEST)
                 .sendAsync()
                 .get()
                 .getTransactionCount();
-
         log.info(">>>>> nonce : {}", nonce);
 
         RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
-                nonce, getGasPrice(), getGasLimit(), to, etherInWei);
+                nonce,
+                getGasPrice(),
+                getGasLimit(),
+                request.getToAddress(),
+                request.getEtherInWei()
+        );
         log.info(">>>>> rawTransaction : {}", rawTransaction);
 
-        // 트랜잭션 서명
         String hexValue = signTransaction(credentials, rawTransaction);
 
-        // 트랜잭션 브로드캐스트
         EthSendTransaction transactionResponse = sendRawTransaction(hexValue);
         log.info(">>>>> transactionResponse : {}", transactionResponse);
 
         if (transactionResponse.hasError()) {
-            throw new Exception("Error processing transaction request: " + transactionResponse.getError().getMessage());
+            log.warn(">>>>> sendTransaction error : {}", transactionResponse.getError().getMessage());
+            throw new TransactionException(ExceptionCode.TRN_003);
         }
 
         final String transactionHash = transactionResponse.getTransactionHash();
         log.info(">>>>> transactionHash : {}", transactionHash);
 
-        return transactionHash;
+        transactionRepository.save(
+                new Transaction(
+                        wallet,
+                        transactionHash,
+                        BigDecimal.valueOf(request.getEtherInWei().longValue()),
+                        TransactionType.WITHDRAW
+                )
+        );
     }
 
     private EthSendTransaction sendRawTransaction(String hexValue) throws InterruptedException, ExecutionException {
@@ -104,7 +120,7 @@ public class TransactionService {
         return hexValue;
     }
 
-    public BigInteger getGasPrice() {
+    private BigInteger getGasPrice() {
         try {
             final BigInteger gasPrice = web3jUtils.getWeb3j()
                     .ethGasPrice()
@@ -121,7 +137,7 @@ public class TransactionService {
         }
     }
 
-    public BigInteger getGasLimit() {
+    private BigInteger getGasLimit() {
         final BigInteger gasLimit = BigInteger.valueOf(21000);
         log.info(">>>>> gasLimit : {}", gasLimit);
         log.info(">>>>> gasLimitInEther : {}", web3jUtils.convertToEther(gasLimit));

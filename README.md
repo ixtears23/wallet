@@ -5,6 +5,7 @@
 - java : openjdk20
 - spring-boot : 3.1.0
 - spring : 6.0.9
+> 참고 : 이더리움이 부족해서 wei 단위로 테스트해서 개발했습니다. 
 
 ### Server 구동 방법
 - docker-compose 파일 실행

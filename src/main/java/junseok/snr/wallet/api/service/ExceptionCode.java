@@ -12,7 +12,8 @@ public enum ExceptionCode {
     WAL_004("privateKey 복호화 오류"),
 
     TRN_001("트랜잭션 생성 시 지갑은 null일 수 없습니다."),
-    TRN_002("지갑의 잔액이 부족해서 출금할 수 없습니다.");
+    TRN_002("지갑의 잔액이 부족해서 출금할 수 없습니다."),
+    TRN_003("트랜잭션 전송 시 에러 발생");
 
     private final String message;
 }
