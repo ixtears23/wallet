@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/crypto-wallet/v1//wallets")
+@RequestMapping("/crypto-wallet/v1/wallets")
 @RestController
 public class WalletController {
     private final WalletService walletService;

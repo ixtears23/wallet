@@ -1,0 +1,8 @@
+### 지갑생성 API
+POST http://localhost:8080/crypto-wallet/v1/wallets
+Content-Type: application/json
+
+{
+  "password": "string",
+  "walletType": "ETH"
+}
