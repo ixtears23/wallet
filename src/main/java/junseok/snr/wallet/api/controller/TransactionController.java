@@ -5,10 +5,9 @@ import junseok.snr.wallet.api.domain.Transaction;
 import junseok.snr.wallet.api.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,9 +18,10 @@ public class TransactionController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public List<Transaction> getTransactions(@RequestParam(required = false) String startingAfter,
-                                             @RequestParam(required = false) String endingBefore) {
-        return transactionService.getTransactions(startingAfter, endingBefore);
+    public Page<Transaction> getTransactions(@RequestParam(required = false) Integer startingAfter,
+                                             @RequestParam(required = false, defaultValue = "10") Integer size,
+                                             @RequestParam(required = false) Integer endingBefore) {
+        return transactionService.getTransactionEvents(startingAfter, endingBefore, size);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

@@ -1,5 +1,6 @@
 package junseok.snr.wallet.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import junseok.snr.wallet.api.service.ExceptionCode;
 import junseok.snr.wallet.api.service.TransactionException;
@@ -16,7 +17,6 @@ import java.math.BigDecimal;
 @Getter
 @Entity
 public class Transaction extends BaseEntity {
-    @Transient
     private static final int CONFIRM_COUNT = 12;
 
     @Id
@@ -29,6 +29,7 @@ public class Transaction extends BaseEntity {
     private TransactionStatus status;
     @Enumerated(EnumType.STRING)
     private TransactionType type;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;

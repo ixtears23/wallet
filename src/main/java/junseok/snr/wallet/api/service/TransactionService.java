@@ -1,5 +1,9 @@
 package junseok.snr.wallet.api.service;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import junseok.snr.wallet.Web3jUtils;
 import junseok.snr.wallet.api.controller.dto.WithdrawDto;
 import junseok.snr.wallet.api.domain.Transaction;
@@ -9,6 +13,11 @@ import junseok.snr.wallet.api.repository.TransactionRepository;
 import junseok.snr.wallet.api.repository.WalletRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.web3j.crypto.Credentials;
@@ -46,7 +55,7 @@ public class TransactionService {
                 .get();
 
         final TransactionReceipt receipt = receiptResponse.getTransactionReceipt()
-                .orElseThrow(() -> new RuntimeException("Transaction receipt not generated yet"));
+                .orElseThrow(() -> new TransactionException(ExceptionCode.TRN_004));
         final BigInteger transactionBlockNumber = receipt.getBlockNumber();
 
         log.info(">>>>> transactionBlockNumber : {}", transactionBlockNumber);
@@ -144,12 +153,36 @@ public class TransactionService {
         return gasLimit;
     }
 
-    public List<Transaction> getTransactions(String startingAfter, String endingBefore) {
-        if (startingAfter != null) {
-            return transactionRepository.findTop10ByTransactionHashGreaterThanOrderByTransactionHashAsc(startingAfter);
-        } else if (endingBefore != null) {
-            return transactionRepository.findTop10ByTransactionHashLessThanOrderByTransactionHashDesc(endingBefore);
-        }
-        return transactionRepository.findTop10ByOrderByTransactionHashDesc();
+    @Transactional(readOnly = true)
+    public Page<Transaction> getTransactionEvents(Integer startAfter, Integer endBefore, int size) {
+
+        Specification<Transaction> spec = (root, query, criteriaBuilder) -> {
+
+            Predicate finalPredicate = null;
+
+            if (startAfter != null) {
+                finalPredicate = criteriaBuilder.greaterThan(root.get("id"), startAfter);
+            }
+
+            if (endBefore != null) {
+                Predicate predicateEndBefore = criteriaBuilder.lessThan(root.get("id"), endBefore);
+                finalPredicate = finalPredicate == null ? predicateEndBefore
+                        : criteriaBuilder.and(finalPredicate, predicateEndBefore);
+            }
+
+            if (startAfter != null && endBefore != null && startAfter > endBefore) {
+                throw new TransactionException(ExceptionCode.TRN_005);
+            }
+
+            return finalPredicate;
+        };
+
+        Pageable pageable = PageRequest.of(
+                0,
+                Math.min(Math.max(size, 10), 100),
+                Sort.by(Sort.Direction.DESC,"id")
+        );
+
+        return transactionRepository.findAll(spec, pageable);
     }
 }
