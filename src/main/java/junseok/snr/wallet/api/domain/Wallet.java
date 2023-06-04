@@ -2,7 +2,7 @@ package junseok.snr.wallet.api.domain;
 
 
 import jakarta.persistence.*;
-import junseok.snr.wallet.AESEncryptionService;
+import junseok.snr.wallet.common.AESEncryptionService;
 import junseok.snr.wallet.api.service.ExceptionCode;
 import junseok.snr.wallet.api.service.WalletException;
 import lombok.*;

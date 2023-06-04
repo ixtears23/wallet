@@ -1,5 +1,6 @@
 package junseok.snr.wallet;
 
+import junseok.snr.wallet.common.AESEncryptionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,10 +1,7 @@
 package junseok.snr.wallet.api.service;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import junseok.snr.wallet.Web3jUtils;
+import junseok.snr.wallet.common.Web3jUtils;
 import junseok.snr.wallet.api.controller.dto.WithdrawDto;
 import junseok.snr.wallet.api.domain.Transaction;
 import junseok.snr.wallet.api.domain.TransactionType;
@@ -32,7 +29,6 @@ import org.web3j.utils.Numeric;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
