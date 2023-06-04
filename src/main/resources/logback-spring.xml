@@ -9,14 +9,14 @@
 
     <logger name="junseok.snr" level="INFO"/>
 
-    <logger name="org.springframework.jdbc" level="TRACE"/>
-    <logger name="org.springframework.transaction" level="TRACE"/>
+    <logger name="org.springframework.jdbc" level="INFO"/>
+    <logger name="org.springframework.transaction" level="INFO"/>
     <logger name="org.springframework.orm.jpa" level="INFO"/>
 
-    <logger name="org.hibernate.SQL" level="TRACE"/>
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+    <logger name="org.hibernate.SQL" level="INFO"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="INFO"/>
     <logger name="org.hibernate.type" level="INFO"/>
-    <logger name="org.hibernate.stat" level="TRACE"/>
+    <logger name="org.hibernate.stat" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />

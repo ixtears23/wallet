@@ -31,9 +31,9 @@ public class TransactionScheduler {
     @Transactional
     @Scheduled(fixedRate = 5000)
     public void updateWithdrawTransactionStatuses() throws Exception {
-        log.debug(">>>>> updateTransactionStatuses - now : {}", LocalDateTime.now());
+        log.info(">>>>> updateTransactionStatuses - now : {}", LocalDateTime.now());
         List<Transaction> transactions = transactionRepository.findLatestTransactions(TransactionStatus.CONFIRMED);
-        log.debug(">>>>> updateTransactionStatuses - transactions : {}", transactions);
+        log.info(">>>>> updateTransactionStatuses - transactions : {}", transactions);
         for (Transaction transaction : transactions) {
             saveTransaction(transaction);
         }
@@ -61,6 +61,7 @@ public class TransactionScheduler {
 
     @Scheduled(fixedRate = 5000)
     public void processDeposit()  {
+        log.info(">>>>> processDeposit");
         final List<Wallet> walletList = walletRepository.findAll();
         walletList.forEach(this::monitoringDeposit);
     }
