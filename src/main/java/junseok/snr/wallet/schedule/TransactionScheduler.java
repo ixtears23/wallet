@@ -56,8 +56,7 @@ public class TransactionScheduler {
         }
     }
 
-    // TODO 블록체인 상태 확인 메서드가 존재해야 함
-//    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 5000)
     public void checkTransactionStatus() throws Exception {
         List<Transaction> transactions = transactionRepository.findLatestTransactions(TransactionStatus.CONFIRMED);
         for (Transaction transaction : transactions) {
