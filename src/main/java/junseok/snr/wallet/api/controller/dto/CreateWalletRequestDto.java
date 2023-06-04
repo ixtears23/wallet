@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class CreateWalletDto {
+public class CreateWalletRequestDto {
 
     @NotNull
     private String password;

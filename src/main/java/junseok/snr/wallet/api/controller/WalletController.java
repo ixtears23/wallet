@@ -2,7 +2,8 @@ package junseok.snr.wallet.api.controller;
 
 
 import jakarta.validation.Valid;
-import junseok.snr.wallet.api.controller.dto.CreateWalletDto;
+import junseok.snr.wallet.api.controller.dto.CreateWalletRequestDto;
+import junseok.snr.wallet.api.controller.dto.CreateWalletResponseDto;
 import junseok.snr.wallet.api.domain.Wallet;
 import junseok.snr.wallet.api.service.WalletService;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,16 @@ public class WalletController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Wallet createWallet(@RequestBody @Valid CreateWalletDto request) throws Exception {
+    public CreateWalletResponseDto createWallet(@RequestBody @Valid CreateWalletRequestDto request) throws Exception {
         log.info(">>>>> createWallet - walletType : {}", request.getWalletType());
-        return walletService.createWallet(request);
+        final Wallet wallet = walletService.createWallet(request);
+
+        return CreateWalletResponseDto.builder()
+                .id(wallet.getId())
+                .walletType(wallet.getWalletType())
+                .balance(wallet.getBalance())
+                .address(wallet.getAddress())
+                .build();
     }
 
     @GetMapping("/{address}")
