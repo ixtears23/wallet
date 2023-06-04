@@ -41,6 +41,7 @@ public class Transaction extends BaseEntity {
             throw new WalletException(ExceptionCode.TRN_002);
         }
 
+        this.wallet = wallet;
         this.transactionHash = transactionHash;
         this.amount = amount;
         this.type = type;
@@ -52,7 +53,8 @@ public class Transaction extends BaseEntity {
     }
 
     public boolean isChangedConfirmation(int confirmationCount) {
-        return this.confirmationCount < confirmationCount;
+        return this.confirmationCount == null
+                || this.confirmationCount < confirmationCount;
     }
 
     public void updateStatus(int confirmationCount) {
