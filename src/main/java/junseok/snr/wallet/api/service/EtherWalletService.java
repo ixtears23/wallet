@@ -2,7 +2,7 @@ package junseok.snr.wallet.api.service;
 
 import io.micrometer.common.util.StringUtils;
 import junseok.snr.wallet.common.Web3jUtils;
-import junseok.snr.wallet.api.controller.dto.CreateWalletDto;
+import junseok.snr.wallet.api.controller.dto.CreateWalletRequestDto;
 import junseok.snr.wallet.api.domain.Wallet;
 import junseok.snr.wallet.api.domain.WalletType;
 import junseok.snr.wallet.api.repository.WalletRepository;
@@ -29,7 +29,7 @@ public class EtherWalletService implements WalletService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Wallet createWallet(CreateWalletDto request) throws Exception {
+    public Wallet createWallet(CreateWalletRequestDto request) throws Exception {
         final ECKeyPair ecKeyPair = Keys.createEcKeyPair();
         final String password = request.getPassword();
 
@@ -66,10 +66,12 @@ public class EtherWalletService implements WalletService {
                 .sendAsync();
         final EthGetBalance ethGetBalance = future.get();
         final BigInteger balance = ethGetBalance.getBalance();
+        log.info(">>>>> address : {}, ethGetBalance :: {}", address, balance);
+        final Wallet wallet = walletRepository.findByAddress(address);
+        final BigInteger walletBalance = wallet.getBalance().toBigInteger();
+        log.info(">>>>> address : {}, walletBalance :: {}", address, walletBalance);
 
-        log.info(">>>>> address : {}, balanceInWei :: {}", address, balance);
-
-        return balance;
+        return walletBalance;
     }
 
     public BigDecimal getBalanceInEther(final String address) throws Exception {
