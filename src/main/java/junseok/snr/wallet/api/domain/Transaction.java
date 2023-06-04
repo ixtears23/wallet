@@ -36,7 +36,7 @@ public class Transaction extends BaseEntity {
     public Transaction(Wallet wallet, String transactionHash, BigDecimal amount, TransactionType type) {
         if (wallet == null) throw new TransactionException(ExceptionCode.TRN_001);
 
-        if (TransactionType.DEPOSIT.equals(type)
+        if (TransactionType.WITHDRAW.equals(type)
                 && wallet.isWithdrawalImpossible(amount)) {
             throw new WalletException(ExceptionCode.TRN_002);
         }

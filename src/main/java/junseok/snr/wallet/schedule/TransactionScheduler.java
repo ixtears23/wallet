@@ -3,6 +3,8 @@ package junseok.snr.wallet.schedule;
 import junseok.snr.wallet.Web3jUtils;
 import junseok.snr.wallet.api.domain.Transaction;
 import junseok.snr.wallet.api.domain.TransactionStatus;
+import junseok.snr.wallet.api.domain.TransactionType;
+import junseok.snr.wallet.api.domain.Wallet;
 import junseok.snr.wallet.api.repository.TransactionRepository;
 import junseok.snr.wallet.api.repository.WalletRepository;
 import junseok.snr.wallet.api.service.TransactionService;
@@ -11,8 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -57,14 +60,38 @@ public class TransactionScheduler {
     }
 
     @Scheduled(fixedRate = 5000)
-    public void checkTransactionStatus() throws Exception {
-        List<Transaction> transactions = transactionRepository.findLatestTransactions(TransactionStatus.CONFIRMED);
-        for (Transaction transaction : transactions) {
+    public void processDeposit()  {
+        final List<Wallet> walletList = walletRepository.findAll();
+        walletList.forEach(this::monitoringDeposit);
+    }
 
-            EthGetTransactionReceipt receipt = web3jUtils.getWeb3j()
-                    .ethGetTransactionReceipt(transaction.getTransactionHash())
-                    .send();
-        }
+    private void monitoringDeposit(Wallet wallet) {
+        web3jUtils.getWeb3j()
+                .transactionFlowable()
+                .subscribe(transaction -> {
+                    if (transaction.getTo() != null
+                            && transaction.getTo()
+                            .equals(wallet.getAddress())) {
+                        log.info(">>>>> transaction.getTo() : {}", transaction.getTo());
+                        log.info(">>>>> monitoringDeposit - transaction_hash : {}", transaction.getHash());
+
+                        BigInteger weiValue = transaction.getValue();
+                        log.info(">>>>> weiValue : {}", weiValue);
+
+                        final Transaction findTransaction = transactionRepository.findFirstByTransactionHashAndType(transaction.getHash(), TransactionType.DEPOSIT);
+
+                        if (findTransaction == null) {
+                            transactionRepository.save(
+                                    new Transaction(
+                                            wallet,
+                                            transaction.getHash(),
+                                            BigDecimal.valueOf(transaction.getValue().longValue()),
+                                            TransactionType.DEPOSIT
+                                    )
+                            );
+                        }
+                    }
+                });
     }
 
 }
