@@ -1,5 +1,28 @@
 # CryptoWallet
 
+## Domain-Driven Design (DDD) Architecture
+이 프로젝트에서는 애플리케이션의 복잡성을 관리하고  
+도메인 모델링과 비즈니스 로직의 중요성에 초점을 맞추기 위해  
+DDD 아키텍처의 구조를 따르고 있습니다  
+  
+아래는 이 프로젝트의 구조를 대략적으로 보여줍니다
+``` mathematica
+junseok.snr
+ └── wallet
+      ├── WalletApplication.java
+      ├── api
+      ├── application
+      |    ├── schedule
+      |    └── service
+      ├── domain
+      │    ├── model
+      │    ├── repository
+      │    └── service
+      └── infrastructure
+           ├── common
+           └── repository
+```
+
 ## 환경
 
 ### 개발환경
