@@ -7,7 +7,7 @@ import junseok.snr.wallet.domain.TransactionType;
 import junseok.snr.wallet.domain.Wallet;
 import junseok.snr.wallet.api.repository.TransactionRepository;
 import junseok.snr.wallet.api.repository.WalletRepository;
-import junseok.snr.wallet.api.service.TransactionService;
+import junseok.snr.wallet.application.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

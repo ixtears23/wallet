@@ -1,4 +1,4 @@
-package junseok.snr.wallet.api.service;
+package junseok.snr.wallet.application.service;
 
 import io.micrometer.common.util.StringUtils;
 import junseok.snr.wallet.common.Web3jUtils;

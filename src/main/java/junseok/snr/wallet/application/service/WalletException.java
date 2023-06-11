@@ -1,4 +1,4 @@
-package junseok.snr.wallet.api.service;
+package junseok.snr.wallet.application.service;
 
 import lombok.Getter;
 

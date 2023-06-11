@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import junseok.snr.wallet.api.controller.dto.CreateWalletRequestDto;
 import junseok.snr.wallet.api.controller.dto.CreateWalletResponseDto;
 import junseok.snr.wallet.domain.Wallet;
-import junseok.snr.wallet.api.service.WalletService;
+import junseok.snr.wallet.application.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

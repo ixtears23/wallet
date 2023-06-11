@@ -1,6 +1,6 @@
 package junseok.snr.wallet.api.domain;
 
-import junseok.snr.wallet.api.service.WalletException;
+import junseok.snr.wallet.application.service.WalletException;
 import junseok.snr.wallet.domain.Wallet;
 import junseok.snr.wallet.domain.WalletType;
 import org.junit.jupiter.api.Assertions;
