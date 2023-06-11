@@ -2,9 +2,9 @@ package junseok.snr.wallet.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import junseok.snr.wallet.application.service.ExceptionCode;
-import junseok.snr.wallet.application.service.TransactionException;
-import junseok.snr.wallet.application.service.WalletException;
+import junseok.snr.wallet.application.service.exception.ExceptionCode;
+import junseok.snr.wallet.application.service.exception.TransactionException;
+import junseok.snr.wallet.application.service.exception.WalletException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

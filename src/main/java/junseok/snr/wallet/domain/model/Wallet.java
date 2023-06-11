@@ -3,8 +3,8 @@ package junseok.snr.wallet.domain.model;
 
 import jakarta.persistence.*;
 import junseok.snr.wallet.infrastructure.common.AESEncryptionService;
-import junseok.snr.wallet.application.service.ExceptionCode;
-import junseok.snr.wallet.application.service.WalletException;
+import junseok.snr.wallet.application.service.exception.ExceptionCode;
+import junseok.snr.wallet.application.service.exception.WalletException;
 import lombok.*;
 
 import java.math.BigDecimal;

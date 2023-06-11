@@ -1,6 +1,6 @@
 package junseok.snr.wallet.infrastructure.common;
 
-import junseok.snr.wallet.application.service.ExceptionCode;
+import junseok.snr.wallet.application.service.exception.ExceptionCode;
 import lombok.Builder;
 
 @Builder

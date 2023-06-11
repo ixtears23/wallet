@@ -1,4 +1,4 @@
-package junseok.snr.wallet.application.service;
+package junseok.snr.wallet.application.service.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

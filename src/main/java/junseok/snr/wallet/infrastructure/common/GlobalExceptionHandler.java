@@ -1,7 +1,7 @@
 package junseok.snr.wallet.infrastructure.common;
 
-import junseok.snr.wallet.application.service.TransactionException;
-import junseok.snr.wallet.application.service.WalletException;
+import junseok.snr.wallet.application.service.exception.TransactionException;
+import junseok.snr.wallet.application.service.exception.WalletException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

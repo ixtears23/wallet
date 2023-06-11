@@ -1,7 +1,7 @@
 package junseok.snr.wallet.infrastructure.common;
 
-import junseok.snr.wallet.application.service.ExceptionCode;
-import junseok.snr.wallet.application.service.WalletException;
+import junseok.snr.wallet.application.service.exception.ExceptionCode;
+import junseok.snr.wallet.application.service.exception.WalletException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

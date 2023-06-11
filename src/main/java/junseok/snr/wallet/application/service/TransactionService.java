@@ -1,6 +1,8 @@
 package junseok.snr.wallet.application.service;
 
 import jakarta.persistence.criteria.Predicate;
+import junseok.snr.wallet.application.service.exception.ExceptionCode;
+import junseok.snr.wallet.application.service.exception.TransactionException;
 import junseok.snr.wallet.infrastructure.common.Web3jUtils;
 import junseok.snr.wallet.api.dto.WithdrawDto;
 import junseok.snr.wallet.domain.model.Transaction;
