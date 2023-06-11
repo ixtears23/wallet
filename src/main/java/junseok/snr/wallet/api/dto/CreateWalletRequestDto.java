@@ -1,7 +1,7 @@
 package junseok.snr.wallet.api.dto;
 
 import jakarta.validation.constraints.NotNull;
-import junseok.snr.wallet.domain.WalletType;
+import junseok.snr.wallet.domain.model.WalletType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
