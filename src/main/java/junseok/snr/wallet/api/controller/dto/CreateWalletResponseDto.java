@@ -1,6 +1,6 @@
 package junseok.snr.wallet.api.controller.dto;
 
-import junseok.snr.wallet.api.domain.WalletType;
+import junseok.snr.wallet.domain.WalletType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

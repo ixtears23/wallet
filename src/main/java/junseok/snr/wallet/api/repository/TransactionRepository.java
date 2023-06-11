@@ -1,8 +1,8 @@
 package junseok.snr.wallet.api.repository;
 
-import junseok.snr.wallet.api.domain.Transaction;
-import junseok.snr.wallet.api.domain.TransactionStatus;
-import junseok.snr.wallet.api.domain.TransactionType;
+import junseok.snr.wallet.domain.Transaction;
+import junseok.snr.wallet.domain.TransactionStatus;
+import junseok.snr.wallet.domain.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

@@ -4,7 +4,7 @@ package junseok.snr.wallet.api.controller;
 import jakarta.validation.Valid;
 import junseok.snr.wallet.api.controller.dto.CreateWalletRequestDto;
 import junseok.snr.wallet.api.controller.dto.CreateWalletResponseDto;
-import junseok.snr.wallet.api.domain.Wallet;
+import junseok.snr.wallet.domain.Wallet;
 import junseok.snr.wallet.api.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package junseok.snr.wallet.api.domain;
+package junseok.snr.wallet.domain;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

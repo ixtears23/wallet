@@ -1,4 +1,4 @@
-package junseok.snr.wallet.api.domain;
+package junseok.snr.wallet.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
