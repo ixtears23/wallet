@@ -5,7 +5,7 @@ import junseok.snr.wallet.common.Web3jUtils;
 import junseok.snr.wallet.api.controller.dto.CreateWalletRequestDto;
 import junseok.snr.wallet.domain.Wallet;
 import junseok.snr.wallet.domain.WalletType;
-import junseok.snr.wallet.api.repository.WalletRepository;
+import junseok.snr.wallet.infrastructure.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

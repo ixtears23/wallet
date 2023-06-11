@@ -1,4 +1,4 @@
-package junseok.snr.wallet.api.repository;
+package junseok.snr.wallet.infrastructure.repository;
 
 import junseok.snr.wallet.domain.Transaction;
 import junseok.snr.wallet.domain.TransactionStatus;

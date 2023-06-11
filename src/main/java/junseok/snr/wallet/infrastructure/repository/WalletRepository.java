@@ -1,4 +1,4 @@
-package junseok.snr.wallet.api.repository;
+package junseok.snr.wallet.infrastructure.repository;
 
 import junseok.snr.wallet.domain.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
