@@ -1,4 +1,4 @@
-package junseok.snr.wallet.application.service;
+package junseok.snr.wallet.domain.service;
 
 import junseok.snr.wallet.api.dto.CreateWalletRequestDto;
 import junseok.snr.wallet.domain.model.Wallet;
