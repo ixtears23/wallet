@@ -1,4 +1,4 @@
-package junseok.snr.wallet.common;
+package junseok.snr.wallet.infrastructure.repository.common;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

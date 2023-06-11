@@ -1,6 +1,6 @@
 package junseok.snr.wallet.schedule;
 
-import junseok.snr.wallet.common.Web3jUtils;
+import junseok.snr.wallet.infrastructure.repository.common.Web3jUtils;
 import junseok.snr.wallet.domain.Transaction;
 import junseok.snr.wallet.domain.TransactionStatus;
 import junseok.snr.wallet.domain.TransactionType;

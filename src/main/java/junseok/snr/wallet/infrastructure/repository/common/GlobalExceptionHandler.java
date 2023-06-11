@@ -1,4 +1,4 @@
-package junseok.snr.wallet.common;
+package junseok.snr.wallet.infrastructure.repository.common;
 
 import junseok.snr.wallet.application.service.TransactionException;
 import junseok.snr.wallet.application.service.WalletException;
