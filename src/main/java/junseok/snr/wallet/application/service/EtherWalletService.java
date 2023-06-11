@@ -1,7 +1,7 @@
 package junseok.snr.wallet.application.service;
 
 import io.micrometer.common.util.StringUtils;
-import junseok.snr.wallet.infrastructure.repository.common.Web3jUtils;
+import junseok.snr.wallet.infrastructure.common.Web3jUtils;
 import junseok.snr.wallet.api.dto.CreateWalletRequestDto;
 import junseok.snr.wallet.domain.model.Wallet;
 import junseok.snr.wallet.domain.model.WalletType;
