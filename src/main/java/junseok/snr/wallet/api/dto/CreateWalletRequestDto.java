@@ -1,4 +1,4 @@
-package junseok.snr.wallet.api.controller.dto;
+package junseok.snr.wallet.api.dto;
 
 import jakarta.validation.constraints.NotNull;
 import junseok.snr.wallet.domain.WalletType;

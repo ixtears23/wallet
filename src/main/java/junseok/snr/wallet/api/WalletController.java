@@ -1,9 +1,9 @@
-package junseok.snr.wallet.api.controller;
+package junseok.snr.wallet.api;
 
 
 import jakarta.validation.Valid;
-import junseok.snr.wallet.api.controller.dto.CreateWalletRequestDto;
-import junseok.snr.wallet.api.controller.dto.CreateWalletResponseDto;
+import junseok.snr.wallet.api.dto.CreateWalletRequestDto;
+import junseok.snr.wallet.api.dto.CreateWalletResponseDto;
 import junseok.snr.wallet.domain.Wallet;
 import junseok.snr.wallet.application.service.WalletService;
 import lombok.RequiredArgsConstructor;

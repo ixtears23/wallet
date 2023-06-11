@@ -1,6 +1,6 @@
-package junseok.snr.wallet.api.controller;
+package junseok.snr.wallet.api;
 
-import junseok.snr.wallet.api.controller.dto.WithdrawDto;
+import junseok.snr.wallet.api.dto.WithdrawDto;
 import junseok.snr.wallet.domain.Transaction;
 import junseok.snr.wallet.application.service.TransactionService;
 import lombok.RequiredArgsConstructor;
