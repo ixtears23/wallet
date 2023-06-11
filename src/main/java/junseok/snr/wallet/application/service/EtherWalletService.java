@@ -5,7 +5,7 @@ import junseok.snr.wallet.infrastructure.repository.common.Web3jUtils;
 import junseok.snr.wallet.api.dto.CreateWalletRequestDto;
 import junseok.snr.wallet.domain.model.Wallet;
 import junseok.snr.wallet.domain.model.WalletType;
-import junseok.snr.wallet.infrastructure.repository.WalletRepository;
+import junseok.snr.wallet.infrastructure.repository.WalletJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 @Service
 public class EtherWalletService implements WalletService {
-    private final WalletRepository walletRepository;
+    private final WalletJpaRepository walletJpaRepository;
     private final Web3jUtils web3jUtils;
 
     @Transactional(rollbackFor = Exception.class)
@@ -35,7 +35,7 @@ public class EtherWalletService implements WalletService {
 
         final String walletFile = generateWalletFile(ecKeyPair, password);
         log.info(">>>>> walletFile :: {}", walletFile);
-        return walletRepository.save(createWallet(ecKeyPair, password));
+        return walletJpaRepository.save(createWallet(ecKeyPair, password));
     }
 
     private Wallet createWallet(ECKeyPair ecKeyPair, String password) {
@@ -67,7 +67,7 @@ public class EtherWalletService implements WalletService {
         final EthGetBalance ethGetBalance = future.get();
         final BigInteger balance = ethGetBalance.getBalance();
         log.info(">>>>> address : {}, ethGetBalance :: {}", address, balance);
-        final Wallet wallet = walletRepository.findByAddress(address);
+        final Wallet wallet = walletJpaRepository.findByAddress(address);
         final BigInteger walletBalance = wallet.getBalance().toBigInteger();
         log.info(">>>>> address : {}, walletBalance :: {}", address, walletBalance);
 

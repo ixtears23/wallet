@@ -6,8 +6,8 @@ import junseok.snr.wallet.api.dto.WithdrawDto;
 import junseok.snr.wallet.domain.model.Transaction;
 import junseok.snr.wallet.domain.model.TransactionType;
 import junseok.snr.wallet.domain.model.Wallet;
-import junseok.snr.wallet.infrastructure.repository.TransactionRepository;
-import junseok.snr.wallet.infrastructure.repository.WalletRepository;
+import junseok.snr.wallet.infrastructure.repository.TransactionJpaRepository;
+import junseok.snr.wallet.infrastructure.repository.WalletJpaRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -35,8 +35,8 @@ import java.util.concurrent.ExecutionException;
 @AllArgsConstructor
 @Service
 public class TransactionService {
-    private final TransactionRepository transactionRepository;
-    private final WalletRepository walletRepository;
+    private final TransactionJpaRepository transactionJpaRepository;
+    private final WalletJpaRepository walletJpaRepository;
     private final Web3jUtils web3jUtils;
 
     public int getConfirmationNumber(String transactionHash) throws Exception {
@@ -65,7 +65,7 @@ public class TransactionService {
 
     @Transactional
     public void withdraw(WithdrawDto request) throws Exception {
-        final Wallet wallet = walletRepository.findByAddress(request.getFromAddress());
+        final Wallet wallet = walletJpaRepository.findByAddress(request.getFromAddress());
         if (wallet == null) throw new TransactionException(ExceptionCode.TRN_001);
 
         Credentials credentials = Credentials.create(wallet.getPrivateKey());
@@ -99,7 +99,7 @@ public class TransactionService {
         final String transactionHash = transactionResponse.getTransactionHash();
         log.info(">>>>> transactionHash : {}", transactionHash);
 
-        transactionRepository.save(
+        transactionJpaRepository.save(
                 new Transaction(
                         wallet,
                         transactionHash,
@@ -179,6 +179,6 @@ public class TransactionService {
                 Sort.by(Sort.Direction.DESC,"id")
         );
 
-        return transactionRepository.findAll(spec, pageable);
+        return transactionJpaRepository.findAll(spec, pageable);
     }
 }

@@ -5,8 +5,8 @@ import junseok.snr.wallet.domain.model.Transaction;
 import junseok.snr.wallet.domain.model.TransactionStatus;
 import junseok.snr.wallet.domain.model.TransactionType;
 import junseok.snr.wallet.domain.model.Wallet;
-import junseok.snr.wallet.infrastructure.repository.TransactionRepository;
-import junseok.snr.wallet.infrastructure.repository.WalletRepository;
+import junseok.snr.wallet.infrastructure.repository.TransactionJpaRepository;
+import junseok.snr.wallet.infrastructure.repository.WalletJpaRepository;
 import junseok.snr.wallet.application.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +25,14 @@ import java.util.List;
 public class TransactionScheduler {
     private final Web3jUtils web3jUtils;
     private final TransactionService transactionService;
-    private final TransactionRepository transactionRepository;
-    private final WalletRepository walletRepository;
+    private final TransactionJpaRepository transactionJpaRepository;
+    private final WalletJpaRepository walletJpaRepository;
 
     @Transactional
     @Scheduled(fixedRate = 5000)
     public void updateWithdrawTransactionStatuses() throws Exception {
         log.info(">>>>> updateTransactionStatuses - now : {}", LocalDateTime.now());
-        List<Transaction> transactions = transactionRepository.findLatestTransactions(TransactionStatus.CONFIRMED);
+        List<Transaction> transactions = transactionJpaRepository.findLatestTransactions(TransactionStatus.CONFIRMED);
         log.info(">>>>> updateTransactionStatuses - transactions : {}", transactions);
         for (Transaction transaction : transactions) {
             saveTransaction(transaction);
@@ -55,14 +55,14 @@ public class TransactionScheduler {
         }
 
         if (transaction.isChangedConfirmation(confirmationCount)) {
-            transactionRepository.save(newTransaction);
+            transactionJpaRepository.save(newTransaction);
         }
     }
 
     @Scheduled(fixedRate = 5000)
     public void processDeposit()  {
         log.info(">>>>> processDeposit");
-        final List<Wallet> walletList = walletRepository.findAll();
+        final List<Wallet> walletList = walletJpaRepository.findAll();
         walletList.forEach(this::monitoringDeposit);
     }
 
@@ -79,10 +79,10 @@ public class TransactionScheduler {
                         BigInteger weiValue = transaction.getValue();
                         log.info(">>>>> weiValue : {}", weiValue);
 
-                        final Transaction findTransaction = transactionRepository.findFirstByTransactionHashAndType(transaction.getHash(), TransactionType.DEPOSIT);
+                        final Transaction findTransaction = transactionJpaRepository.findFirstByTransactionHashAndType(transaction.getHash(), TransactionType.DEPOSIT);
 
                         if (findTransaction == null) {
-                            transactionRepository.save(
+                            transactionJpaRepository.save(
                                     new Transaction(
                                             wallet,
                                             transaction.getHash(),
