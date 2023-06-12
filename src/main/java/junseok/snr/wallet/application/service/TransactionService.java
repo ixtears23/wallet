@@ -3,13 +3,13 @@ package junseok.snr.wallet.application.service;
 import jakarta.persistence.criteria.Predicate;
 import junseok.snr.wallet.application.service.exception.ExceptionCode;
 import junseok.snr.wallet.application.service.exception.TransactionException;
+import junseok.snr.wallet.domain.repository.TransactionRepository;
+import junseok.snr.wallet.domain.repository.WalletRepository;
 import junseok.snr.wallet.infrastructure.common.Web3jUtils;
 import junseok.snr.wallet.api.dto.WithdrawDto;
 import junseok.snr.wallet.domain.model.Transaction;
 import junseok.snr.wallet.domain.model.TransactionType;
 import junseok.snr.wallet.domain.model.Wallet;
-import junseok.snr.wallet.infrastructure.repository.TransactionJpaRepository;
-import junseok.snr.wallet.infrastructure.repository.WalletJpaRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,8 +37,8 @@ import java.util.concurrent.ExecutionException;
 @AllArgsConstructor
 @Service
 public class TransactionService {
-    private final TransactionJpaRepository transactionJpaRepository;
-    private final WalletJpaRepository walletJpaRepository;
+    private final TransactionRepository transactionRepository;
+    private final WalletRepository walletRepository;
     private final Web3jUtils web3jUtils;
 
     public int getConfirmationNumber(String transactionHash) throws Exception {
@@ -67,7 +67,7 @@ public class TransactionService {
 
     @Transactional
     public void withdraw(WithdrawDto request) throws Exception {
-        final Wallet wallet = walletJpaRepository.findByAddress(request.getFromAddress());
+        final Wallet wallet = walletRepository.findByAddress(request.getFromAddress());
         if (wallet == null) throw new TransactionException(ExceptionCode.TRN_001);
 
         Credentials credentials = Credentials.create(wallet.getPrivateKey());
@@ -101,7 +101,7 @@ public class TransactionService {
         final String transactionHash = transactionResponse.getTransactionHash();
         log.info(">>>>> transactionHash : {}", transactionHash);
 
-        transactionJpaRepository.save(
+        transactionRepository.save(
                 new Transaction(
                         wallet,
                         transactionHash,
@@ -181,6 +181,6 @@ public class TransactionService {
                 Sort.by(Sort.Direction.DESC,"id")
         );
 
-        return transactionJpaRepository.findAll(spec, pageable);
+        return transactionRepository.findAll(spec, pageable);
     }
 }

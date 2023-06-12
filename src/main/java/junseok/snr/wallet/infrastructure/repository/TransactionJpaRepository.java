@@ -2,7 +2,7 @@ package junseok.snr.wallet.infrastructure.repository;
 
 import junseok.snr.wallet.domain.model.Transaction;
 import junseok.snr.wallet.domain.model.TransactionStatus;
-import junseok.snr.wallet.domain.model.TransactionType;
+import junseok.snr.wallet.domain.repository.TransactionRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -10,9 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface TransactionJpaRepository extends JpaRepository<Transaction, Long>, JpaSpecificationExecutor<Transaction> {
-     Transaction findFirstByTransactionHashAndType(String transactionHash, TransactionType transactionType);
-
+public interface TransactionJpaRepository extends JpaRepository<Transaction, Long>, JpaSpecificationExecutor<Transaction>, TransactionRepository {
     @Query(value = """
                 SELECT t.*
                   FROM transaction t
@@ -28,5 +26,6 @@ public interface TransactionJpaRepository extends JpaRepository<Transaction, Lon
                     ON t.id = tm.max_id
                    AND t.transaction_hash = tm.transaction_hash""",
             nativeQuery = true)
+    @Override
     List<Transaction> findLatestTransactions(@Param("status") TransactionStatus status);
 }

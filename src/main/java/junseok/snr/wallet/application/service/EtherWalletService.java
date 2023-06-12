@@ -3,12 +3,12 @@ package junseok.snr.wallet.application.service;
 import io.micrometer.common.util.StringUtils;
 import junseok.snr.wallet.application.service.exception.ExceptionCode;
 import junseok.snr.wallet.application.service.exception.WalletException;
+import junseok.snr.wallet.domain.repository.WalletRepository;
 import junseok.snr.wallet.domain.service.WalletService;
 import junseok.snr.wallet.infrastructure.common.Web3jUtils;
 import junseok.snr.wallet.api.dto.CreateWalletRequestDto;
 import junseok.snr.wallet.domain.model.Wallet;
 import junseok.snr.wallet.domain.model.WalletType;
-import junseok.snr.wallet.infrastructure.repository.WalletJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 @Service
 public class EtherWalletService implements WalletService {
-    private final WalletJpaRepository walletJpaRepository;
+    private final WalletRepository walletRepository;
     private final Web3jUtils web3jUtils;
 
     @Transactional(rollbackFor = Exception.class)
@@ -38,7 +38,7 @@ public class EtherWalletService implements WalletService {
 
         final String walletFile = generateWalletFile(ecKeyPair, password);
         log.info(">>>>> walletFile :: {}", walletFile);
-        return walletJpaRepository.save(createWallet(ecKeyPair, password));
+        return walletRepository.save(createWallet(ecKeyPair, password));
     }
 
     private Wallet createWallet(ECKeyPair ecKeyPair, String password) {
@@ -70,7 +70,7 @@ public class EtherWalletService implements WalletService {
         final EthGetBalance ethGetBalance = future.get();
         final BigInteger balance = ethGetBalance.getBalance();
         log.info(">>>>> address : {}, ethGetBalance :: {}", address, balance);
-        final Wallet wallet = walletJpaRepository.findByAddress(address);
+        final Wallet wallet = walletRepository.findByAddress(address);
         final BigInteger walletBalance = wallet.getBalance().toBigInteger();
         log.info(">>>>> address : {}, walletBalance :: {}", address, walletBalance);
 
