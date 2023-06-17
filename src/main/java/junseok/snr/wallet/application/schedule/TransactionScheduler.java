@@ -10,6 +10,7 @@ import junseok.snr.wallet.domain.model.Wallet;
 import junseok.snr.wallet.application.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ public class TransactionScheduler {
     private final TransactionRepository transactionRepository;
     private final WalletRepository walletRepository;
 
+    @Profile("withdraw-schedule")
     @Transactional
     @Scheduled(fixedRate = 5000)
     public void updateWithdrawTransactionStatuses() throws Exception {
@@ -59,6 +61,8 @@ public class TransactionScheduler {
         }
     }
 
+    @Profile("deposit-schedule")
+    @Transactional
     @Scheduled(fixedRate = 5000)
     public void processDeposit()  {
         log.info(">>>>> processDeposit");
