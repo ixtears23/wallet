@@ -1,18 +1,39 @@
 version: '3.1'
 services:
-  app:
+  api:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - 8080:8080
     environment:
+      - SPRING_PROFILES_ACTIVE=api
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/wallet
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create
     depends_on:
       - db
+  deposit-schedule:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=deposit-schedule
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/wallet
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+  withdraw-schedule:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=withdraw-schedule
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/wallet
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
   db:
     image: postgres:13
     environment:
