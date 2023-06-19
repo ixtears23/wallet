@@ -41,30 +41,6 @@ public class TransactionService {
     private final WalletRepository walletRepository;
     private final Web3jUtils web3jUtils;
 
-    public int getConfirmationNumber(String transactionHash) throws Exception {
-        final EthGetTransactionReceipt receiptResponse = web3jUtils.getWeb3j()
-                .ethGetTransactionReceipt(transactionHash)
-                .sendAsync()
-                .get();
-
-        final EthBlockNumber latestBlockResponse = web3jUtils.getWeb3j()
-                .ethBlockNumber()
-                .sendAsync()
-                .get();
-
-        final TransactionReceipt receipt = receiptResponse.getTransactionReceipt()
-                .orElseThrow(() -> new TransactionException(ExceptionCode.TRN_004));
-        final BigInteger transactionBlockNumber = receipt.getBlockNumber();
-
-        log.info(">>>>> transactionBlockNumber : {}", transactionBlockNumber);
-
-        BigInteger latestBlockNumber = latestBlockResponse.getBlockNumber();
-        final int confirmationNumber = latestBlockNumber.subtract(transactionBlockNumber)
-                .intValue();
-        log.info(">>>>> transactionHash : {}, confirmationNumber : {}", transactionHash, confirmationNumber);
-        return confirmationNumber;
-    }
-
     @Transactional
     public void withdraw(WithdrawDto request) throws Exception {
         final Wallet wallet = walletRepository.findByAddress(request.getFromAddress());
