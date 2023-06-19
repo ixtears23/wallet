@@ -37,9 +37,6 @@ public class Transaction extends BaseEntity {
     public Transaction(Wallet wallet, String transactionHash, BigDecimal amount, TransactionType type) {
         if (wallet == null) throw new TransactionException(ExceptionCode.TRN_001);
 
-        // 지갑의 잔액 뿐아니라,
-        // 출금 진행중인 트랜잭션으
-
         if (TransactionType.WITHDRAW.equals(type)
                 && wallet.isWithdrawalImpossible(amount)) {
             throw new TransactionException(ExceptionCode.TRN_002);

@@ -13,4 +13,6 @@ RUN ./gradlew clean build
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "/app/build/libs/crypto-wallet-0.0.1-RELEASE.jar"]
+ENTRYPOINT ["java"]
+
+CMD [$JAVA_OPTS, "-jar", "/app/build/libs/crypto-wallet-0.0.1-RELEASE.jar"]

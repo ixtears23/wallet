@@ -12,6 +12,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+      - JAVA_OPTS=-Xmx256m -Xms128m
     depends_on:
       - db
   deposit-schedule:
@@ -24,6 +25,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+      - JAVA_OPTS=-Xmx256m -Xms128m
   withdraw-schedule:
     build:
       context: .
@@ -34,6 +36,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+      - JAVA_OPTS=-Xmx256m -Xms128m
   db:
     image: postgres:13
     environment:
