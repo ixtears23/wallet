@@ -37,13 +37,13 @@ class TransactionTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
-    @DisplayName("Transaction 생성 시, 출금이 불가능한 경우 WalletException 발생, ExceptionCode.TRN_002 에러 코드 반환")
+    @DisplayName("Transaction 생성 시, 출금이 불가능한 경우 TransactionException 발생, ExceptionCode.TRN_002 에러 코드 반환")
     @Test
     void createTransactionWithWithdrawalImpossibleTest() {
         Mockito.when(wallet.isWithdrawalImpossible(Mockito.any(BigDecimal.class)))
                 .thenReturn(true);
 
-        Exception exception = assertThrows(WalletException.class, () -> {
+        Exception exception = assertThrows(TransactionException.class, () -> {
             transaction = new Transaction(wallet, "testHash", new BigDecimal(10), TransactionType.WITHDRAW);
         });
 
@@ -90,7 +90,7 @@ class TransactionTest {
 
         assertEquals(TransactionStatus.CONFIRMED, transaction.getStatus());
         Mockito.verify(wallet, Mockito.times(1))
-                .withdraw(Mockito.any(BigDecimal.class));
+                .withdraw(Mockito.any());
     }
 
     @DisplayName("Transaction(입금) 생성 시 ConfirmCount가 12보다 큰 경우 CONFIRMED 상태로 변경되는 테스트")

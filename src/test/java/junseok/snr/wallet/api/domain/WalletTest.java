@@ -1,6 +1,8 @@
 package junseok.snr.wallet.api.domain;
 
-import junseok.snr.wallet.application.service.exception.WalletException;
+import junseok.snr.wallet.application.service.exception.TransactionException;
+import junseok.snr.wallet.domain.model.Transaction;
+import junseok.snr.wallet.domain.model.TransactionType;
 import junseok.snr.wallet.domain.model.Wallet;
 import junseok.snr.wallet.domain.model.WalletType;
 import org.junit.jupiter.api.Assertions;
@@ -37,17 +39,18 @@ class WalletTest {
         wallet.deposit(depositAmount);
 
         BigDecimal withdrawAmount = new BigDecimal("100");
-        wallet.withdraw(withdrawAmount);
+        final Transaction transaction = new Transaction(wallet, "xxxxxxxxxx", withdrawAmount, TransactionType.WITHDRAW);
+        wallet.withdraw(transaction);
 
         Assertions.assertEquals(depositAmount.subtract(withdrawAmount), wallet.getBalance());
     }
 
-    @DisplayName("잔액이 충분하지 않을 때 출금하면 WalletException이 발생하는지 테스트")
+    @DisplayName("잔액이 충분하지 않을 때 출금하면 TransactionException이 발생하는지 테스트")
     @Test
     void withdrawInsufficientBalanceTest() {
-        BigDecimal withdrawAmount = new BigDecimal("300");
+        final BigDecimal withdrawAmount = new BigDecimal("300");
 
-        Assertions.assertThrows(WalletException.class, () -> wallet.withdraw(withdrawAmount));
+        Assertions.assertThrows(TransactionException.class, () -> new Transaction(wallet, "xxxxxxx", withdrawAmount, TransactionType.WITHDRAW));
     }
 
     @DisplayName("충분한 잔액이 있을 때 isWithdrawalImpossible 메서드가 false 를 반환하는지 테스트")
@@ -69,4 +72,5 @@ class WalletTest {
 
         Assertions.assertTrue(wallet.isWithdrawalImpossible(depositAmount.add(BigDecimal.ONE)));
     }
+
 }

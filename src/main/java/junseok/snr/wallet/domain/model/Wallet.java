@@ -41,18 +41,30 @@ public class Wallet extends BaseEntity {
         balance = balance.add(amount);
     }
 
-    public void withdraw(BigDecimal amount) {
-        if (isWithdrawalImpossible(amount)) {
+    public void withdraw(Transaction transaction) {
+        if (isWithdrawalImpossible(transaction.getAmount())) {
             throw new WalletException(ExceptionCode.WAL_002);
         }
-        balance = balance.subtract(amount);
+        balance = balance.subtract(transaction.getAmount());
+        transactions.remove(transaction);
     }
 
     public boolean isWithdrawalImpossible(BigDecimal amount) {
-        return balance.compareTo(amount) < 0;
+
+        BigDecimal totalTransactionAmount = BigDecimal.ZERO;
+
+        for (Transaction transaction : transactions) {
+            totalTransactionAmount = totalTransactionAmount.add(transaction.getAmount());
+        }
+
+        final BigDecimal subtractBalance = balance.subtract(totalTransactionAmount);
+
+        return subtractBalance.compareTo(amount) < 0;
     }
 
     public String getPrivateKey() {
         return AESEncryptionService.decrypt(this.privateKey, this.password);
     }
+
+
 }
